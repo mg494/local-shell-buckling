@@ -1,0 +1,100 @@
+finish,
+/clear,start
+/filn,zylinder,1
+/out,,prot
+
+/inp,buttons,inp
+pi = acos(-1)
+
+! Variablen
+rr = 1000   ! Radius Schale
+aa = 0 		! Amplitude Wellblech
+ll = 5000	! Länge der Schale
+
+umfang = 2*rr*pi
+ndivv = 3
+TT = umfang/ndivv
+wfreq = 2*pi/TT
+inc = TT/rr*180/pi/8
+
+! Geometrie
+/prep7
+clocal,11,1
+csys,11
+
+k,1,
+k,2,,,ll
+l,1,2
+
+idx = 3
+*do,winkel,0,360,inc
+	k,idx,rr+aa*sin(wfreq*winkel*pi/180*rr),winkel,0
+	*if,idx,gt,3,then
+		l,idx-1,idx
+	*endif
+	idx = idx + 1
+*enddo
+
+lsel,all
+adrag,all,,,,,,1
+
+! netzeinstellungen
+lsel,,loc,z,ll/2
+lsel,u,line,,1
+lesize,all,,,100
+
+csys,0
+
+! element eigenschaften
+et,1,shell281
+
+sectype,1,shell
+secdata,1,1
+
+mp,ex,,2e5
+mp,nuxy,,0.3
+mp,dens,,7850e-12
+
+! vernetzung
+alls
+esize,100
+amesh,all
+nummrg,node
+alls
+eplo
+
+! Randbedinungen
+nsel,,loc,z
+d,all,all
+nsel,,loc,z,ll
+d,all,ux
+d,all,uy
+
+! lineare testrechnung
+/solu
+anty,static
+pstres,on
+
+nsel,,loc,z,ll
+f,all,fz,-10e3
+
+alls
+solve
+
+/post1
+set,last
+prrs
+plns,u,sum
+
+fini
+/solu
+antype,buckl
+bucopt,lanb,10
+mxpand,all
+
+alls
+solve
+
+/post1
+set,first
+plns,u,sum
