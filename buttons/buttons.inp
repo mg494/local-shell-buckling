@@ -1,0 +1,6 @@
+*abbr,linbuckl,/inp,linbuckl,inp
+*abbr,set_prev,/inp,buttons/set_prev,inp
+*abbr,set_next,/inp,buttons/set_next,inp
+*abbr,dscal_auto,/inp,buttons/dscal_auto,inp
+*abbr,dscal_off,/inp,buttons/dscal_off,inp
+*abbr,usum,/inp,buttons/usum,inp
