@@ -1,0 +1,79 @@
+fini
+/prep7
+
+pi = acos(-1)
+
+/inp,parameters,inp
+
+perimeter = 2*rr*pi
+period = perimeter/ndivv
+wfreq = 2*pi/period
+inc = period/rr*180/pi/8
+
+
+! Geometrie
+/prep7
+clocal,11,cylin
+csys,11
+
+! path for extrusion
+k,1,
+k,2,,,ll
+l,1,2
+
+! shell geometry
+idx = 3
+*do,winkel,0,360,inc
+	k,idx,rr+aa*sin(wfreq*winkel*pi/180*rr),winkel,0
+	*if,idx,gt,3,then
+		l,idx-1,idx
+	*endif
+	idx = idx + 1
+*enddo
+
+! drag along path
+lsel,all
+adrag,all,,,,,,1
+
+! glue open end of faces
+asel,all
+aglue,all
+
+! mesh settings along cylinder axis
+lsel,,loc,z,ll/2
+lsel,u,line,,1
+lesize,all,,,mesh_ldiv
+
+! cartesian coordinate system
+csys,0
+
+! element setting
+et,1,shell281
+
+! shell section
+sectype,1,shell
+secdata,tt,1
+
+! material
+mp,ex,,youngs
+mp,nuxy,,nu
+mp,dens,,rho
+
+! mesh geometry
+alls
+esize,elem_size
+amesh,all
+alls
+eplo
+
+! boundary conditions
+! botton
+nsel,,loc,z
+d,all,all
+
+! top
+nsel,,loc,z,ll-1,ll+1
+d,all,ux
+d,all,uy
+
+

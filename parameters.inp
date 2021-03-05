@@ -1,0 +1,24 @@
+
+dbname = 'cylin_shell'
+
+! geometry
+rr = 500   ! radius
+aa = 0 		! amplitude
+ll = 50000	! length
+ndivv = 3
+
+! sections
+tt = 1 ! shell thickness
+
+! material
+youngs = 2e5 ! MPa
+nu = 0.3
+rho = 7850e-12 ! t/mm3
+
+! mesh
+mesh_ldiv = 100 ! number mesh divisions along length
+elem_size = 100
+
+! loads
+force_load = 10e4
+load_factor = 6

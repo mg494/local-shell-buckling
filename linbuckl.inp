@@ -1,86 +1,13 @@
 finish,
 /clear,start
-/filn,cylin_shell,1 ! corru_shell
+
+/inp,parameters,inp
+
+/filn,%dbname%,1
 /out,,prot
 
 /inp,buttons/buttons,inp
-pi = acos(-1)
-
-! parameters
-rr = 500   ! radius
-aa = 0 		! amplitude
-ll = 50000	! length
-
-perimeter = 2*rr*pi
-ndivv = 3
-TT = perimeter/ndivv
-wfreq = 2*pi/TT
-inc = TT/rr*180/pi/8
-
-! Geometrie
-/prep7
-clocal,11,1
-csys,11
-
-! path for extrusion
-k,1,
-k,2,,,ll
-l,1,2
-
-! shell geometry
-idx = 3
-*do,winkel,0,360,inc
-	k,idx,rr+aa*sin(wfreq*winkel*pi/180*rr),winkel,0
-	*if,idx,gt,3,then
-		l,idx-1,idx
-	*endif
-	idx = idx + 1
-*enddo
-
-! drag along path
-lsel,all
-adrag,all,,,,,,1
-
-! glue open end of faces
-asel,all
-aglue,all
-
-! mesh settings along cylinder axis
-lsel,,loc,z,ll/2
-lsel,u,line,,1
-lesize,all,,,100
-
-! cartesian coordinate system
-csys,0
-
-! element setting
-et,1,shell281
-
-! shell section
-sectype,1,shell
-secdata,1,1
-
-! material
-mp,ex,,2e5
-mp,nuxy,,0.3
-mp,dens,,7850e-12
-
-! mesh geometry
-alls
-esize,100
-amesh,all
-alls
-eplo
-
-! boundary conditions
-! botton
-nsel,,loc,z
-d,all,all
-
-! top
-nsel,,loc,z,ll-1,ll+1
-d,all,ux
-d,all,uy
+/inp,geo,inp
 
 ! linear static analysis
 /solu
@@ -90,7 +17,7 @@ pstres,on
 ! apply force on top
 *get,num_node,node,,count
 nsel,,loc,z,ll-1,ll+1
-f,all,fz,-10e4/num_node
+f,all,fz,-force_load/num_node
 
 alls
 solve
@@ -100,7 +27,11 @@ solve
 set,last
 prrs
 plns,u,sum
-
+/ang,1
+/auto,1
+/view,1,1,1,1
+/rep
+/ui,copy,save,emf,graph,color,reverse,no,100
 
 ! linear buckling analysis
 fini
@@ -116,3 +47,8 @@ solve
 /post1
 set,first
 plns,u,sum
+/ang,1
+/auto,1
+/view,1,1,1,1
+/rep
+/ui,copy,save,emf,graph,color,reverse,no,100
