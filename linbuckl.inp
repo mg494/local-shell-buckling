@@ -6,14 +6,14 @@ finish,
 /inp,buttons,inp
 pi = acos(-1)
 
-! Variablen
-rr = 1000   ! Radius Schale
-aa = 0 		! Amplitude Wellblech
-ll = 5000	! Länge der Schale
+! parameters
+rr = 1000   ! radius
+aa = 10 		! amplitude
+ll = 5000	! length
 
-umfang = 2*rr*pi
-ndivv = 3
-TT = umfang/ndivv
+perimeter = 2*rr*pi
+ndivv = 12
+TT = perimeter/ndivv
 wfreq = 2*pi/TT
 inc = TT/rr*180/pi/8
 
@@ -22,10 +22,12 @@ inc = TT/rr*180/pi/8
 clocal,11,1
 csys,11
 
+! path for extrusion
 k,1,
 k,2,,,ll
 l,1,2
 
+! shell geometry
 idx = 3
 *do,winkel,0,360,inc
 	k,idx,rr+aa*sin(wfreq*winkel*pi/180*rr),winkel,0
@@ -35,57 +37,72 @@ idx = 3
 	idx = idx + 1
 *enddo
 
+! drag along path
 lsel,all
 adrag,all,,,,,,1
 
-! netzeinstellungen
+! glue open end of faces
+asel,all
+aglue,all
+
+! mesh settings along cylinder axis
 lsel,,loc,z,ll/2
 lsel,u,line,,1
 lesize,all,,,100
 
+! cartesian coordinate system
 csys,0
 
-! element eigenschaften
+! element setting
 et,1,shell281
 
+! shell section
 sectype,1,shell
 secdata,1,1
 
+! material
 mp,ex,,2e5
 mp,nuxy,,0.3
 mp,dens,,7850e-12
 
-! vernetzung
+! mesh geometry
 alls
 esize,100
 amesh,all
-nummrg,node
 alls
 eplo
 
-! Randbedinungen
+! boundary conditions
+! botton
 nsel,,loc,z
 d,all,all
-nsel,,loc,z,ll
+
+! top
+nsel,,loc,z,ll-1,ll+1
 d,all,ux
 d,all,uy
 
-! lineare testrechnung
+! linear static analysis
 /solu
 anty,static
 pstres,on
 
-nsel,,loc,z,ll
-f,all,fz,-10e3
+! apply force on top
+*get,num_node,node,,count
+nsel,,loc,z,ll-1,ll+1
+f,all,fz,-10e3/num_node
 
 alls
 solve
 
+! post processing
 /post1
 set,last
 prrs
 plns,u,sum
 
+
+! linear buckling analysis
 fini
 /solu
 antype,buckl
@@ -95,6 +112,7 @@ mxpand,all
 alls
 solve
 
+! post processing
 /post1
 set,first
 plns,u,sum
