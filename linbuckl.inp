@@ -1,18 +1,18 @@
 finish,
 /clear,start
-/filn,zylinder,1
+/filn,cylin_shell,1 ! corru_shell
 /out,,prot
 
-/inp,buttons,inp
+/inp,buttons/buttons,inp
 pi = acos(-1)
 
 ! parameters
-rr = 1000   ! radius
-aa = 10 		! amplitude
-ll = 5000	! length
+rr = 500   ! radius
+aa = 0 		! amplitude
+ll = 50000	! length
 
 perimeter = 2*rr*pi
-ndivv = 12
+ndivv = 3
 TT = perimeter/ndivv
 wfreq = 2*pi/TT
 inc = TT/rr*180/pi/8
@@ -90,7 +90,7 @@ pstres,on
 ! apply force on top
 *get,num_node,node,,count
 nsel,,loc,z,ll-1,ll+1
-f,all,fz,-10e3/num_node
+f,all,fz,-10e4/num_node
 
 alls
 solve
