@@ -1,0 +1,36 @@
+finish,
+/clear,start
+
+/inp,parameters,inp
+
+/filn,%dbname%_nl,1
+/out,,prot
+
+/inp,buttons/buttons,inp
+/inp,geo,inp
+
+! update geometry
+alls
+upgeom,10,1,1,%dbname%,rst
+
+! static analysis
+/solu
+anty,static
+
+! nonlinear controls
+nlgeom,on
+arclen,on,3,0.1
+nsubst,30
+
+! apply force on top
+time,force_load*load_factor/1e3
+*get,num_node,node,,count
+nsel,,loc,z,ll-1,ll+1
+f,all,fz,-force_load*load_factor/num_node
+
+alls
+solve
+
+/post1
+set,last
+plns,u,sum
