@@ -36,8 +36,8 @@ lsel,all
 adrag,all,,,,,,1
 
 ! glue open end of faces
-asel,all
-aglue,all
+!asel,all
+!aglue,all
 
 ! mesh settings along cylinder axis
 lsel,,loc,z,ll/2
@@ -66,6 +66,11 @@ amesh,all
 alls
 eplo
 
+! merge nodes
+nsel,all
+nummrg,node
+
+
 ! boundary conditions
 ! botton
 nsel,,loc,z
@@ -77,3 +82,4 @@ d,all,ux
 d,all,uy
 
 
+save,,db
