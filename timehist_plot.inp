@@ -1,0 +1,10 @@
+/post26
+alls
+node_top = NODE(rr,0,ll/2)
+nsol,2,node_top,u,y,uz_top
+abs,2,2
+XVAR,2
+/AXLAB,X,Deformation
+/AXLAB,Y,Load in kN
+PLVAR,1
+/ui,copy,save,emf,graph,color,reverse,no,100
