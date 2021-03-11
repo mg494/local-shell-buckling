@@ -15,8 +15,8 @@ anty,static
 pstres,on
 
 ! apply force on top
-*get,num_node,node,,count
 nsel,,loc,z,ll-1,ll+1
+*get,num_node,node,,count
 f,all,fz,-force_load/num_node
 
 alls
