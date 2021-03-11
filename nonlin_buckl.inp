@@ -11,26 +11,38 @@ finish,
 
 ! update geometry
 alls
-upgeom,10,1,1,%dbname%,rst
+upgeom,upgeom1_fact,1,upgeom1_subst,%dbname%,rst
+
+alls
+upgeom,upgeom2_fact,1,upgeom2_subst,%dbname%,rst
+
 
 ! static analysis
 /solu
 anty,static
 
 ! nonlinear controls
+outres,all,all
 nlgeom,on
-arclen,on,3,0.1
-nsubst,30
+arclen,on,arc_max,arc_min
+nsubst,num_subst
 
 ! apply force on top
 time,force_load*load_factor/1e3
-*get,num_node,node,,count
 nsel,,loc,z,ll-1,ll+1
+*get,num_node,node,,count
 f,all,fz,-force_load*load_factor/num_node
 
 alls
 solve
+save,,db
 
 /post1
 set,last
 plns,u,sum
+
+/ang,1
+/auto,1
+/view,1,1,1,1
+/rep
+/ui,copy,save,emf,graph,color,reverse,no,100

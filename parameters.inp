@@ -2,10 +2,11 @@
 dbname = 'cylin_shell'
 
 ! geometry
-rr = 500   ! radius
+rr = 700   ! radius
 aa = 0 		! amplitude
 ll = 50000	! length
-ndivv = 3
+ndivv = 15
+
 
 ! sections
 tt = 1 ! shell thickness
@@ -15,10 +16,26 @@ youngs = 2e5 ! MPa
 nu = 0.3
 rho = 7850e-12 ! t/mm3
 
+
 ! mesh
 mesh_ldiv = 100 ! number mesh divisions along length
 elem_size = 100
 
 ! loads
-force_load = 10e4
-load_factor = 6
+force_load = 1e5
+load_factor = 8
+
+! nonlinear controls
+num_subst = 50
+arc_max = 3
+arc_min = 0.1
+
+! upgeom
+upgeom1_fact = 1
+upgeom1_subst = 1
+
+upgeom2_fact = 1
+upgeom2_subst = 2
+
+! analytical
+sig_kr_th = youngs*tt/rr
